@@ -1,0 +1,25 @@
+#!/bin/bash
+checkForNM=$(ls /var/service/NetworkManager | grep run)
+if [ $checkForNM == 'run' ]
+then
+	choice=$(echo -e "Enable\nDisable" | dmenu -i -p "nm(enabled): ")
+else
+	choice=$(echo -e "Disable\nEnable" | dmenu -i -p "nm(disbaled): ")
+fi
+echo $choice
+if [ $choice == 'Enable' ]
+then
+	rm -fr /var/service/dhcpcd
+	rm -fr /var/service/wpa_supplicant
+	ln -s /etc/sv/NetworkManager /var/service
+	ln -s /etc/sv/dbus /var/service
+	sv restart NetworkManager
+	sleep 5
+	nm-applet &
+else
+	rm -fr /var/service/dbus
+	rm -fr /var/service/NetworkManager
+	ln -s /etc/sv/dhcpcd /var/service
+    sv restart dhcpcd
+fi
+	

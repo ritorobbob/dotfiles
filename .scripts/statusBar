@@ -1,0 +1,10 @@
+#!/bin/bash
+
+#batteryPercent=$(cat /sys/class/power_supply/BAT0/capacity)
+#currentTime=$(date "+%H:%M")
+
+while true; do
+	xsetroot -name "$(cat /sys/class/power_supply/BAT0/capacity)% $(date "+%H:%M")"
+	sleep 5
+done
+
